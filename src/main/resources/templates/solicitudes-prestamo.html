@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="home  :: head">
+    <meta charset="UTF-8">
+
+    <title>Solicitudes de  Préstamos</title>
+	
+</head>
+<body>
+
+<!-- Main container -->
+<main class="full-box main-container">
+    <!-- Nav lateral -->
+    <section class="full-box nav-lateral">
+		<div class="full-box nav-lateral-bg show-nav-lateral"></div>
+			<div class="full-box nav-lateral-content" th:replace="home :: nav-lateral">
+		</div>
+    </section>
+    <!-- Page content -->
+    <section th:fragment="contenido" class="full-box page-content">
+        <nav class="full-box navbar-info">
+            <a href="#" class="float-left show-nav-lateral">
+                <i class="fas fa-exchange-alt"></i>
+            </a>
+            <a href="user-update.html">
+                <i class="fas fa-user-cog"></i>
+            </a>
+            <a href="#" class="btn-exit-system">
+                <i class="fas fa-power-off"></i>
+            </a>
+        </nav>
+
+        <!-- Page header -->
+        <div class="full-box page-header">
+            <h3 class="text-left">
+                <i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR SOLICITUDES
+            </h3>
+        </div>
+
+        <div class="container-fluid">
+            <ul class="full-box list-unstyled page-nav-tabs">
+                <li>
+                    <a href="/prestatario-crear"><i class="fas fa-plus fa-fw"></i> &nbsp; NUEVO PRESTATARIO</a>
+                </li>
+                <li>
+                    <a href="/prestatario-list"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE PRESTATARIOS</a>
+                </li>
+                <li>
+                    <a href="/prestatario-search"><i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR PRESTATARIO</a>
+                </li>
+                <li>
+                    <a class="active" href="/solicitudes-prestamo"><i class="fas fa-search fa-fw"></i> &nbsp; SOLICITUDES DE PRÉSTAMOS</a>
+                </li>
+            	<li>
+                    <a href="/cuotas-list-prestamista-pendiente"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; CUOTAS DE PAGO PENDIENTES</a>
+                </li>
+            </ul>
+        </div>
+
+       <div align="center" th:if=${param.prestamoRechazado}>
+			<div class="alert alert-danger">Préstamo Rechazado Correctamente</div>
+		</div>
+        <!-- Content -->
+        <div class="container-fluid">
+            <form id="searchForm" class="form-neon" th:action="@{/solicitudes-filtrar}">
+                <div class="container-fluid">
+                    <div class="row justify-content-md-center">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="prestatario" class="bmd-label-floating">Prestatario</label>
+                                <input type="text" class="form-control" id="prestatario" name="prestatario" maxlength="100" required>
+                            </div>
+                            <div class="form-group">
+								<div class="mb-3 row">
+								    <label for="primeraFecha" class="col-sm-2 col-form-label">Desde</label>
+								    <div class="col-sm-10">
+								      <input type="date" class="form-control" id="primeraFecha" name="primeraFecha" required>
+								    </div>
+							  	</div>
+							  	<div class="mb-3 row">
+								    <label for="segundaFecha" class="col-sm-2 col-form-label">Hasta</label>
+								    <div class="col-sm-10">
+								      <input type="date" class="form-control" id="segundaFecha" name="segundaFecha" required>
+								    </div>
+							  	</div>
+							</div>
+                        <div class="col-12">
+                            <p class="text-center" style="margin-top: 40px;">
+                                <button type="submit" id="searchButton" class="btn btn-raised btn-info"><i class="fas fa-search"></i> &nbsp; FILTRAR</button>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+       
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table table-dark table-sm">
+                    <thead>
+                    <tr class="text-center roboto-medium">
+                        <th>#</th>
+                        <th>NOMBRES DEL PRESTATARIO</th>
+                        <th>FECHA INICIO</th>
+                        <th>FECHA FIN</th>
+                        <th>MONTO</th>
+                        <th>INTERES</th>
+                        <th>TASA</th>
+                        <th>DETALLE</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Aquí se cargarán dinámicamente los resultados de la búsqueda -->
+                    <tr th:each="s, iterStat : ${lstSolicitudes}" class="text-center">
+						<td th:text="${iterStat.index + 1}"></td>
+                        <td hidden th:text="${s.idSolicitud}"></td>
+                        <td hidden th:text="${s.idPrestamista.nombres}+' '+${s.idPrestamista.apePaterno}+' '+${s.idPrestamista.apeMaterno}"></td>
+                        <td th:text="${s.idPrestatario.nombres}+' '+${s.idPrestatario.apePaterno}+' '+${s.idPrestatario.apeMaterno}"></td>             
+                        <td th:text="${#dates.format(s.fecInicio, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#dates.format(s.fecFin, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${s.monto}"></td>
+                        <td th:text="${s.interes}"></td>
+                        <td hidden th:text="${s.dias}"></td>
+                        <td hidden th:text="${s.pagodiario}"></td>
+                        <td hidden th:text="${s.diaslaborales}"></td>
+                        <td th:text="${s.interes}"></td>
+                        <td>
+							<a class="btn btn-success custom-btn" onclick="abrirModal(this)">VER</a>
+						</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </section>
+</main>
+
+			<!-- Modal -->
+<div class="modal fade" id="AbrirModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">REGISTRAR PRÉSTAMO</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="solicitudForm" method="post">
+    	  <div class="modal-body">	
+			  <h1>OPEN MODAL</h1>
+			 <div class="mb-3 row" style="display: none;">
+			    <label for="inputIdSolicitud" class="col-sm-2 col-form-label">IDSOLICITUD</label>
+			    <span class="col-sm-1"></span>
+			    <div class="col-sm-9">
+			      <input type="text" class="form-control" name="idSolicitud" id="inputIdSolicitud" readonly>
+			    </div>
+		  	</div>
+			<div class="mb-3 row">
+			    <label for="inputPrestatario" class="col-sm-2 col-form-label">PRESTATARIO</label>
+			    <span class="col-sm-1"></span>
+			    <div class="col-sm-9">
+			      <input type="text" class="form-control" id="inputPrestatario" readonly>
+			    </div>
+		  	</div>
+		  	<div class="mb-3 row">
+			    <label for="inputPrestamista" class="col-sm-2 col-form-label">PRESTAMISTA</label>
+			    <span class="col-sm-1"></span>
+			    <div class="col-sm-9">
+			      <input type="text" class="form-control" id="inputPrestamista" readonly>
+			    </div>
+		  	</div>
+			<div class="mb-3 row">
+		    <label for="inputMonto" class="col-sm-2 col-form-label">MONTO</label>
+		    <span class="col-sm-1"></span>
+		    <div class="col-sm-9">
+		      <input type="text" class="form-control" id="inputMonto" readonly>
+		    </div>
+		  </div>
+		  <div class="mb-3 row">
+		    <label for="inputInteres" class="col-sm-2 col-form-label">INTERES</label>
+		    <span class="col-sm-1"></span>
+		    <div class="col-sm-9">
+		      <input type="number" class="form-control" id="inputInteres" readonly>
+		    </div>
+		  </div>
+		  <div class="mb-3 row">
+		    <label for="inputTasa" class="col-sm-2 col-form-label">TASA</label>
+		    <span class="col-sm-1"></span>
+		    <div class="col-sm-9">
+		      <input type="number" class="form-control" id="inputTasa" readonly>
+		    </div>
+		  </div>
+		  
+		  <div class="mb-3 row">
+		    <label for="inputDias" class="col-sm-2 col-form-label">DIAS</label>
+		    <span class="col-sm-1"></span>
+		    <div class="col-sm-9">
+		      <input type="number" class="form-control" name="dias" id="inputDias" readonly>
+		    </div>
+		  </div>
+		  
+		  <div class="mb-3 row">
+		    <label for="inputDiasLaborales" class="col-sm-2 col-form-label">DIAS LABORALES</label>
+		    <span class="col-sm-1"></span>
+		    <div class="col-sm-9">
+		      <input type="number" class="form-control" name="diaslaborales" id="inputDiasLaborales" readonly>
+		    </div>
+		  </div>
+		  
+		   <div class="mb-3 row">
+		    <label for="inputPagoDiario" class="col-sm-2 col-form-label">PAGO DIARIO</label>
+		    <span class="col-sm-1"></span>
+		    <div class="col-sm-9">
+		      <input type="number" class="form-control" name="pagodiario" id="inputPagoDiario" readonly>
+		    </div>
+		  </div>
+		  <div class="mb-3 row">
+		    <label for="inputFechaInicio" class="col-sm-2 col-form-label">FECHA INICIO</label>
+		    <span class="col-sm-1"></span>
+		    <div class="col-sm-9">
+		      <input type="text" class="form-control" id="inputFechaInicio" name="fecInicio" readonly>
+		    </div>
+		  </div>
+		  
+		  
+		   <div class="mb-3 row">
+		    <label for="inputFechaFin" class="col-sm-2 col-form-label">FECHA FIN</label>
+		    <span class="col-sm-1"></span>
+		    <div class="col-sm-9">
+		      <input type="text" class="form-control" id="inputFechaFin" name="fecFin" readonly>
+		    </div>
+		  </div>
+		  	  
+		  <div class="mb-3 row text-center">
+			  <div class="col">
+			  	<button type="button" onclick="aprobar()" class="btn btn-raised btn-success btn-sm"><i class="far fa-save"></i> &nbsp; APROBAR</button>
+			  </div>
+			  <div class="col">
+			  	<button type="button" onclick="rechazar()" class="btn btn-raised btn-danger btn-sm"><i class="far fa-save"></i> &nbsp; RECHAZAR</button>
+			  </div>
+		  </div>
+		  
+		  </div>
+		</form>
+    	  </div>
+    	  </div>
+      </div>
+
+	<script>
+	    function aprobar() {
+	        document.getElementById("solicitudForm").action = "/registrarprestamo";
+	        document.getElementById("solicitudForm").submit();
+	    }
+	
+	    function rechazar() {
+	        document.getElementById("solicitudForm").action = "/rechazarprestamo";
+	        document.getElementById("solicitudForm").submit();
+	    }
+	</script>
+	<script>
+	    function abrirModal(element) {
+	        // Abre el modal con el id "AbrirModal"
+	        $('#AbrirModal').modal('show');
+	        
+	        // Obtiene la fila correspondiente a la solicitud seleccionada
+	        var $row = $(element).closest('tr');
+	        
+	        // Obtiene los datos de la solicitud de la fila
+	        var idSolicitud = $row.find('td:eq(1)').text();
+	        var fecInicio = $row.find('td:eq(4)').text();
+	        var fecFin = $row.find('td:eq(5)').text();
+	        var montoTotal = parseFloat($row.find('td:eq(6)').text()); // Índice 4 para el monto
+	        var tasa = parseFloat($row.find('td:eq(7)').text()); // Índice 5 para la tasa de interés
+	        var dias = parseInt($row.find('td:eq(8)').text()); // Índice 7 para los días
+	        var pagodiario = parseFloat($row.find('td:eq(9)').text()); // Índice 8 para el pago diario
+	        var diaslaborales = parseFloat($row.find('td:eq(10)').text()); // Índice 8 para el pago diario
+	        
+	        // Calcular el monto sin intereses
+	        var montosininteres = montoTotal / (1 + (tasa/100));
+	        // Calcular el interés
+	        var interes = montoTotal - montosininteres;
+	        
+	        // Asigna los valores a los campos del modal
+	        $('#inputIdSolicitud').val(idSolicitud);
+	        $('#inputMonto').val(montosininteres.toFixed(2));
+	        $('#inputInteres').val(interes.toFixed(2));
+	        $('#inputTasa').val(tasa);
+	        $('#inputDias').val(dias);
+	        $('#inputPagoDiario').val(pagodiario.toFixed(2));
+	        $('#inputFechaInicio').val(fecInicio);
+	        $('#inputFechaFin').val(fecFin);
+	        $('#inputDiasLaborales').val(diaslaborales);
+	        $('#inputIdSolicitud1').val(idSolicitud);
+	
+	        // También puedes establecer el nombre del prestatista, si está disponible
+	        // Esto asume que el nombre del prestatista está disponible en la lista de solicitudes
+	        var prestatista = $row.find('td:eq(2)').text(); // Índice 2 para el nombre del prestatista
+	        $('#inputPrestamista').val(prestatista);
+	        var prestatario = $row.find('td:eq(3)').text();
+	        $('#inputPrestatario').val(prestatario);
+	    }
+	</script>
+
+<!-- Incluir el fragmento de JavaScript -->
+<div th:include="home :: javascript-include"></div>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="home  :: head">
+    <meta charset="UTF-8">
+
+    <title>Cuotas de Pago Pendientes</title>
+
+</head>
+<body>
+
+<!-- Main container -->
+<main class="full-box main-container">
+    <!-- Nav lateral -->
+    <section class="full-box nav-lateral">
+		<div class="full-box nav-lateral-bg show-nav-lateral"></div>
+			<div class="full-box nav-lateral-content" th:replace="home :: nav-lateral">
+		</div>
+    </section>
+    <!-- Page content -->
+    <section th:fragment="contenido" class="full-box page-content">
+        <nav class="full-box navbar-info">
+            <a href="#" class="float-left show-nav-lateral">
+                <i class="fas fa-exchange-alt"></i>
+            </a>
+            <a href="user-update.html">
+                <i class="fas fa-user-cog"></i>
+            </a>
+            <a href="#" class="btn-exit-system">
+                <i class="fas fa-power-off"></i>
+            </a>
+        </nav>
+
+        <!-- Page header -->
+        <div class="full-box page-header">
+            <h3 class="text-left">
+                <i class="fas fa-search fa-fw"></i> &nbsp; BUSCAR CUOTAS
+            </h3>
+        </div>
+
+        <div class="container-fluid">
+            <ul class="full-box list-unstyled page-nav-tabs">
+				<li>
+					<a href="/prestamos"><i class="fas fa-plus fa-fw"></i> &nbsp; SOLICITAR PRÉSTAMO</a>
+				</li>
+				<li>
+					<a href="/historial-prestamo"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; HISTORIAL DE PRÉSTAMOS</a>
+				</li>
+                <li>
+                    <a class="active" href="/cuotas-list-prestatario-pendiente"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; CUOTAS DE PAGOS PENDIENTES</a>
+                </li>
+            </ul>
+        </div>
+
+       <div align="center" th:if=${param.prestamoAprobado}>
+			<div class="alert alert-info">Préstamo Aprobado Correctamente</div>
+		</div>
+        <!-- Content -->
+        <div class="container-fluid">
+            <form id="searchForm" class="form-neon" th:action="@{/cuotas-search-prestatario}">
+                <div class="container-fluid">
+                    <div class="row justify-content-md-center">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+								<div class="mb-3 row">
+								    <label for="primeraFecha" class="col-sm-2 col-form-label">Desde</label>
+								    <div class="col-sm-10">
+								      <input type="date" class="form-control" id="primeraFecha" name="primeraFecha" required>
+								    </div>
+							  	</div>
+							  	<div class="mb-3 row">
+								    <label for="segundaFecha" class="col-sm-2 col-form-label">Hasta</label>
+								    <div class="col-sm-10">
+								      <input type="date" class="form-control" id="segundaFecha" name="segundaFecha" required>
+								    </div>
+							  	</div>
+							</div>
+                        <div class="col-12">
+                            <p class="text-center" style="margin-top: 40px;">
+                                <button type="submit" id="searchButton" class="btn btn-raised btn-info"><i class="fas fa-search"></i> &nbsp; BUSCAR</button>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="container-fluid">
+            <div class="table-responsive">
+                <table class="table table-dark table-sm">
+                    <thead>
+                    <tr class="text-center roboto-medium">
+                        <th>#</th>
+                        <th>NRO. CUOTA</th>
+                        <th>MONTO</th>
+                        <th>FECHA PAGO</th>
+                        <th>FECHA VENCIMIENTO</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Aquí se cargarán dinámicamente los resultados de la búsqueda -->
+                    <tr th:each="c, iterStat : ${lstCuotas}" class="text-center">
+						<td th:text="${iterStat.index + 1}"></td>
+                        <td th:text="${c.numeroCuota}"></td>
+                        <td th:text="${c.montoCuota}"></td>
+                        <td th:text="${#dates.format(c.fechaPago, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#dates.format(c.fechaVencimiento, 'dd/MM/yyyy')}"></td>         
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </section>
+</main>
+
+<!-- Incluir el fragmento de JavaScript -->
+<div th:include="home :: javascript-include"></div>
+</body>
+</html>

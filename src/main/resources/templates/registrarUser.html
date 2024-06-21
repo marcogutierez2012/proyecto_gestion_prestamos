@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head  head th:replace="login  :: headLogin">
+<meta charset="UTF-8">
+<title>Registro de Prestatario</title>
+</head>
+<body>
+	<style>
+		/* Estilos para el select */
+.select100 {
+	
+	
+  font-family: Poppins-Regular;
+  color: #333333;
+  line-height: 1.2;
+  font-size: 18px;
+
+  display: block;
+  width: 100%;
+  background: transparent;
+  height: 60px;
+  padding: 0 20px;
+
+  /* Ajustes adicionales para que el select se vea más similar al input */
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #ccc; /* Línea inferior gris para imitar el borde del input */
+}
+
+/* Estilos para el contenedor del select */
+.wrap-input100.select {
+  position: relative;
+}
+
+
+
+
+	</style>
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+			<div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
+				<form method="post" th:action="@{/guardar}" th:object="${usuario}" class="login100-form validate-form flex-sb flex-w">
+					<!-- Mostrar mensaje de error -->
+					<div th:if="${error}" class="alert alert-danger">
+					    <p th:text="${error}"></p>
+					</div>
+					
+					<!-- Mostrar mensaje de éxito -->
+					<div th:if="${registroExitoso}" class="alert alert-info">
+					    <p>Se ha registrado exitosamente a la aplicación</p>
+					</div>
+
+
+
+					
+					<span class="login100-form-title p-b-53">
+						Registro
+						<hr>
+						<h5>Prestatario</h5>
+						
+						
+					</span>
+	
+					<div class="p-t-31 p-b-9">
+						<span class="txt1">
+							Usuario
+						</span>
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Username is required">
+						<input id="useranme" name="username" class="input100" type="text" th:field="*{username}">
+						<span class="focus-input100"></span>
+					</div>
+
+				<div class="row g-2">	
+					<div class="col-md">
+						<div class="p-t-31 p-b-9">
+							<span class="txt1">
+								Nombre de Usuario
+							</span>
+						</div>
+						
+						<div class="wrap-input100 validate-input" data-validate = "Username is required">
+							<input id="nombres" name="nombres" class="input100" type="text" th:field="*{nombres}">
+							<span class="focus-input100"></span>
+						</div>
+					</div>
+						
+					<div class="col-md">
+						<div class="p-t-31 p-b-9">
+							<span class="txt1">
+								Apellido Paterno
+							</span>
+						</div>
+						<div class="wrap-input100 validate-input" data-validate = "Username is required">
+							<input id="Apellido Paterno" name="Apellido Paterno" class="input100" type="text" th:field="*{apePaterno}">
+							<span class="focus-input100"></span>
+						</div>
+					</div>
+				</div>
+					
+					
+				<div class="row g-2">
+					<div class="col-md">
+						<div class="p-t-31 p-b-9">
+							<span class="txt1">
+								Apellido Materno
+							</span>
+						</div>
+						<div class="wrap-input100 validate-input" data-validate = "Username is required">
+							<input id="Apellido Materno" name="Apellido Materno" class="input100" type="text" th:field="*{apeMaterno}">
+							<span class="focus-input100"></span>
+						</div>
+					</div>
+					
+					<div class="col-md">
+						<div class="p-t-31 p-b-9">
+							<span class="txt1">
+								Contraseña
+							</span>
+	
+						</div>
+						<div class="wrap-input100 validate-input" data-validate = "Password is required">
+							<input id="password" name="password" class="input100" type="password"  th:field="*{password}" >
+							<span class="focus-input100"></span>
+						</div>
+					</div>
+				</div>
+				
+						<div class="p-t-31 p-b-9">
+							<span class="txt1">
+								Email
+							</span>
+						</div>
+						<div class="wrap-input100 validate-input" data-validate = "Username is required">
+							<input id="email" name="email" class="input100" type="text" th:field="*{email}">
+							<span class="focus-input100"></span>
+						</div>
+					
+					
+					
+					
+				<div class="row g-2">
+						
+					<div class="col-md">
+						<div class="p-t-31 p-b-9">
+							<span class="txt1">
+								Telefono
+							</span>
+						</div>
+						<div class="wrap-input100 validate-input" data-validate = "Username is required">
+							<input id="Telefono" name="Telefono" class="input100" type="text" th:field="*{telefono}">
+							<span class="focus-input100"></span>
+						</div>					
+					</div>
+					
+					<div class="col-md">
+						<div class="p-t-31 p-b-9">
+							<span class="txt1">
+								Dni
+							</span>
+							</div>
+						<div class="wrap-input100 validate-input" data-validate = "Username is required">
+							<input id="dni" name="dni" class="input100" type="text" th:field="*{dni}">
+							<span class="focus-input100"></span>
+						</div>
+					</div>			
+				</div>
+					
+					
+				<div class="row g-2" style="display: none;">
+						<div class="col-md">
+					<div class="p-t-31 p-b-9">
+						<span class="txt1">
+							Estado
+						</span>
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Username is required">
+						<input id="estado" name="estado" class="input100" type="text" value="0" readonly th:field="*{estado}">
+						<span class="focus-input100"></span>
+					</div>
+						</div>
+					
+					<div class="col-md">
+					<div class="p-t-31 p-b-9">
+						<span class="txt1">
+							idRol
+						</span>
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Username is required">
+						<input id="idRol" name="idRol" class="input100" type="text" readonly th:field="*{idRol.idRol}">
+						<span class="focus-input100"></span>
+					</div>
+					
+					</div>
+					</div>
+					
+					<div class="row g-2" style="display: none;">
+						
+						<div class="col-md">
+					<div class="p-t-31 p-b-9">
+						<span class="txt1">
+							idZona
+						</span>
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Username is required">
+						<input id="idZona" name="idZona" class="input100" type="number" readonly th:field="*{idZona.idZona}">>
+						<span class="focus-input100"></span>
+					</div>
+						</div>
+						
+						<div class="col-md">
+					<div class="p-t-31 p-b-9">
+						<span class="txt1">
+							idUsuarioLider
+						</span>
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Username is required">
+						<input id="idUsuarioLider" name="idUsuarioLider" class="input100" type="text"  readonly th:field="*{idUsuarioLider}">
+						<span class="focus-input100"></span>
+					</div>
+						</div>
+					
+					</div>
+					
+					<!-- Verificar si hay un error y mostrar el mensaje -->
+					<div th:if="${error}">
+					    <div class="alert alert-danger">
+					        <p th:text="${error}"></p>
+					    </div>
+					</div>
+					
+					<div class="p-t-31 p-b-9">
+					    <span class="txt1">Prestamista</span>
+					</div>
+					
+					
+					<div class="wrap-input100 validate-input select" data-validate="Username is required">
+					    <select id="selectPrestamista" class="select100" name="selectPrestamista" >
+							 <option value="-1">Selecciona una Prestamista</option>
+							 <option th:each="u : ${listprestamista}" th:value="${u.idUsuario}" th:text="${u.nombres}"></option>
+					    </select>
+					    <span class="focus-select100"></span>
+					</div>
+
+					<div class="container-login100-form-btn m-t-17">
+						<button type="submit" class="login100-form-btn">
+							Crear Usuario
+						</button>
+					</div>
+
+					<div class="w-full text-center p-t-55">
+						<span class="txt2">
+							¿Ya Cuentas Con un Usuario?
+						</span>
+
+						<a href="/login" class="txt2 bo1">
+							Ingresa Aqui
+						</a>
+					</div>
+				</form>
+								
+
+
+				
+				
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+    <div th:include="login :: javascript-include"></div>
+</body>
+</html>

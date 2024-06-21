@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="home  :: head">
+    <meta charset="UTF-8">
+    
+    <title>Lista de Solicitudes</title>
+
+</head>
+
+<style>
+.aprobado {
+    color: green;
+    font-weight: bold;
+}
+
+.rechazado {
+    color: red;
+    font-weight: bold;
+}
+
+.pendiente {
+    color: grey;
+    font-weight: bold;
+}
+	
+</style>
+<body>
+    <!-- Main container -->
+    <main class="full-box main-container">
+	<!-- Nav lateral -->
+		<section class="full-box nav-lateral">
+			<div class="full-box nav-lateral-bg show-nav-lateral"></div>
+				<div class="full-box nav-lateral-content" th:replace="home :: nav-lateral">
+			</div>
+		</section>
+        <section th:fragment="contenido" class="full-box page-content">
+            <nav class="full-box navbar-info">
+                <a href="#" class="float-left show-nav-lateral">
+                    <i class="fas fa-exchange-alt"></i>
+                </a>
+                <a href="user-update.html">
+                    <i class="fas fa-user-cog"></i>
+                </a>
+                <a href="#" class="btn-exit-system">
+                    <i class="fas fa-power-off"></i>
+                </a>
+            </nav>
+            <!-- Page header -->
+            <div class="full-box page-header">
+                <h3 class="text-left">
+                    <i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE SOLICITUDES
+                </h3>
+            </div>
+            <div class="container-fluid">
+                <ul class="full-box list-unstyled page-nav-tabs">
+                    <li>
+                        <a href="/prestamos"><i class="fas fa-plus fa-fw"></i> &nbsp; NUEVO PRÉSTAMO</a>
+                    </li>
+                    <li>
+                        <a class="active" href="#"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE PRÉSTAMOS</a>
+                    </li>
+                    <li>
+                    	<a href="/cuotas-list-prestatario-pendiente"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; CUOTAS DE PAGO PENDIENTES</a>
+                	</li>
+                </ul>
+            </div>
+            
+            <!--CONTENT-->
+            
+			 <div class="container-fluid">
+				<div class="table-responsive">
+				<div align="center" th:if=${param.solicitudExitosa}>
+						<div class="alert alert-success">Solicitud registrada Exitosamente</div>
+				</div>
+					<table class="table table-dark table-sm">
+						<thead>
+							<tr class="text-center roboto-medium">
+								<th>#</th>
+								<th>MONTO</th>
+								<th>FECHA DE REGISTRO</th>
+								<th>FECHA DE INICIO</th>
+								<th>FECHA DE FIN</th>
+								<th>DIAS</th>
+								<th>PRESTAMISTA</th>
+								<th>ESTADO</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="text-center" th:each="s, iterStat : ${lstSolicitudes}">
+								<td id="idSolicitud" th:text="${iterStat.index + 1}"></td>
+								<td hidden th:text="${s.idSolicitud}"></td>
+								<td th:text="${s.monto}"></td>
+								<td th:text="${#dates.format(s.fecRegistro, 'dd/MM/yyyy')}"></td>
+								<td th:text="${#dates.format(s.fecInicio, 'dd/MM/yyyy')}"></td>
+								<td th:text="${#dates.format(s.fecFin, 'dd/MM/yyyy')}"></td>
+								<td th:text="${s.dias}"></td>
+								<td th:text="${s.idPrestamista.nombres}+' '+${s.idPrestamista.apePaterno}"></td>
+								<td th:text="${s.estado}" th:class="${s.estado == 'APROBADO' ? 'aprobado' : s.estado == 'RECHAZADO' ? 'rechazado' : 'pendiente'}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination justify-content-center">
+						<li class="page-item disabled">
+							<a class="page-link" href="#" tabindex="-1">Previous</a>
+						</li>
+						<li class="page-item"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item">
+							<a class="page-link" href="#">Next</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+        </section>
+    </main>
+    
+    <!-- Incluir el fragmento de JavaScript -->
+    <div th:include="home :: javascript-include"></div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+	
+<head th:fragment="head">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>Home</title>
+
+	<!-- Normalize V8.0.1 -->
+	<link rel="stylesheet" href="/csspage/normalize.css">
+
+
+
+
+	<!-- Bootstrap Material Design V4.0 -->
+	<link rel="stylesheet" href="/csspage/bootstrap-material-design.min.css">
+
+	<!-- Font Awesome V5.9.0 -->
+	<link rel="stylesheet" href="/csspage/all.css">
+
+
+	<!-- jQuery Custom Content Scroller V3.1.5 -->
+	<link rel="stylesheet" href="/csspage/jquery.mCustomScrollbar.css">
+	
+	<!-- General Styles -->
+	<link rel="stylesheet" href="/csspage/style.css">
+	<!-- boot strap5-->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+	
+	<!-- Main container -->
+	<main  class="full-box main-container">
+		<!-- Nav lateral -->
+		<section class="full-box nav-lateral">
+			<div class="full-box nav-lateral-bg show-nav-lateral"></div>
+			<div class="full-box nav-lateral-content" th:fragment="nav-lateral">
+				<figure class="full-box nav-lateral-avatar">
+					<i class="far fa-times-circle show-nav-lateral"></i>
+					<img src="/assets/avatar/Avatar.png" class="img-fluid" alt="Avatar">
+					<figcaption class="roboto-medium text-center">
+					<span sec:authentication="name">Username</span>
+					    <br>
+					    <small class="roboto-condensed-light">
+					        <span sec:authentication="principal.authorities">Roles</span> 
+					    </small>
+					</figcaption>
+
+				</figure>
+				<div class="full-box nav-lateral-bar"></div>
+				<nav class="full-box nav-lateral-menu">
+					<ul>
+						<li>
+							<a href="/home"><i class="fab fa-dashcube fa-fw"></i> &nbsp; Dashboard</a>
+						</li>
+					<!-- inicio del rol -->
+					<ul>
+						<li sec:authorize="hasAnyAuthority('Inversionista')">
+							<a href="#" class="nav-btn-submenu"><i class="fas fa-users fa-fw"></i> &nbsp; Jefe de Prestamistas <i class="fas fa-chevron-down"></i></a>
+							<ul>
+								<li>
+									<a href="/nuevoJefe"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar Jefe</a>
+								</li>
+								<li>
+									<a href="/listaJefe"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de Jefes</a>
+								</li>
+								<li>
+									<a href="/buscarJefe"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar Jefe</a>
+								</li>
+							</ul>
+						</li>
+						<li sec:authorize="hasAnyAuthority('Jefe de Prestamista')">
+							<a href="#" class="nav-btn-submenu"><i class="fas fa-users fa-fw"></i> &nbsp; Prestamistas <i class="fas fa-chevron-down"></i></a>
+							<ul>
+								<li>
+									<a th:href="@{/prestamista-crear}"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar Prestamista</a>
+								</li>
+								<li>
+									<a th:href="@{/prestamista/listado}"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de Prestamista</a>
+								</li>
+								<li>
+									<a href="/prestamista-search"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar Prestamista</a>
+								</li>
+							</ul>
+						</li>
+
+						<li sec:authorize="hasAnyAuthority('Prestamista')">
+							<a href="#" class="nav-btn-submenu"><i class="fas fa-users fa-fw"></i> &nbsp; Prestatario <i class="fas fa-chevron-down"></i></a>
+							<ul>
+								<li>
+									<a href="/prestatario-crear"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar Prestatario</a>
+								</li>
+								<li>
+									<a th:href="@{/prestatario-list}"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de Prestatario</a>
+								</li>
+								<li>
+									<a href="/prestatario-search"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar Prestatario</a>
+								</li>
+								<li>
+									<a href="/solicitudes-prestamo"><i class="fas fa-search fa-fw"></i> &nbsp; Solicitudes de Préstamo</a>
+								</li>
+								<li>
+				                    <a href="/cuotas-list-prestamista-pendiente"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Cuotas de pago pendientes</a>
+				                </li>
+							</ul>
+						</li>
+
+						<li>
+
+					
+						<li sec:authorize="hasAnyAuthority('Administrador')">
+
+							<a href="#" class="nav-btn-submenu"><i class="fas fa-pallet fa-fw"></i> &nbsp; Items <i class="fas fa-chevron-down"></i></a>
+							<ul>
+								<li>
+									<a href="/item-new"><i class="fas fa-plus fa-fw"></i> &nbsp; Agregar item</a>
+								</li>
+								<li>
+									<a href="/item-list"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de items</a>
+								</li>
+								<li>
+									<a href="/item-search"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar item</a>
+								</li>
+							</ul>
+						</li>
+
+						<li sec:authorize="hasAnyAuthority('Prestatario')">
+							<a href="#" class="nav-btn-submenu"><i class="fas fa-file-invoice-dollar fa-fw"></i> &nbsp; Préstamos <i class="fas fa-chevron-down"></i></a>
+							<ul>
+								<li>
+									<a href="/prestamos"><i class="fas fa-plus fa-fw"></i> &nbsp; Solicitar préstamo</a>
+								</li>
+								<li>
+									<a href="/historial-prestamo"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Historial de préstamos</a>
+								</li>
+								<li>
+				                    <a href="/cuotas-list-prestatario-pendiente"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Cuotas de pago pendientes</a>
+				                </li>
+							</ul>
+						</li>
+
+						<li sec:authorize="hasAnyAuthority('Administrador')">
+							<a href="#" class="nav-btn-submenu"><i class="fas  fa-user-secret fa-fw"></i> &nbsp; Usuarios <i class="fas fa-chevron-down"></i></a>
+							<ul>
+								<li>
+									<a href="/user-new"><i class="fas fa-plus fa-fw"></i> &nbsp; Nuevo usuario</a>
+								</li>
+								<li>
+									<a href="/user-list"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; Lista de usuarios</a>
+								</li>
+								<li> 
+									<a href="/user-search"><i class="fas fa-search fa-fw"></i> &nbsp; Buscar usuario</a>
+								</li>
+							</ul>
+						</li>
+
+						<li sec:authorize="hasAnyAuthority('Administrador')">
+							<a href="/company"><i class="fas fa-store-alt fa-fw"></i> &nbsp; Empresa</a>
+						</li>
+					<!-- fin de rol--></ul>
+					</ul>
+				</nav>
+			</div>
+		</section>
+
+		<!-- Page content -->
+		<section th:fragment="page-content" class="full-box page-content">
+			<nav class="full-box navbar-info">
+				<a href="#" class="float-left show-nav-lateral">
+					<i class="fas fa-exchange-alt"></i>
+				</a>
+				<a href="/user-update">
+					<i class="fas fa-user-cog"></i>
+				</a>
+				<a th:href="@{/logout}" class="btn-exit-system">
+					<i class="fas fa-power-off"></i>
+				</a>
+			</nav>
+
+			<!-- Page header -->
+			<div class="full-box page-header" sec:authorize="hasAnyAuthority('Administrador')">
+				<h3 class="text-left">
+					<i class="fab fa-dashcube fa-fw"></i> &nbsp; DASHBOARD
+					
+				</h3>
+				<p class="text-justify">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit nostrum rerum animi natus beatae ex. Culpa blanditiis tempore amet alias placeat, obcaecati quaerat ullam, sunt est, odio aut veniam ratione.
+				</p>
+			</div>
+			
+			<!-- Content -->
+			<div class="full-box tile-container" sec:authorize="hasAnyAuthority('Administrador')">
+
+				<a href="/nuevoJefe" class="tile">
+					<div class="tile-tittle">Jefes de Prestamistas</div>
+					<div class="tile-icon">
+						<i class="fas fa-users fa-fw"></i>
+						<p>5 Registrados</p>
+					</div>
+				</a>
+
+				<a href="/item-list" class="tile">
+					<div class="tile-tittle">Zona</div>
+					<div class="tile-icon">
+						<i class="fas fa-pallet fa-fw"></i>
+						<p>9 Registrados</p>
+					</div>
+				</a>
+
+				<a href="reservation-list.html" class="tile">
+					<div class="tile-tittle">Prestamos</div>
+					<div class="tile-icon">
+						<i class="fas fa-file-invoice-dollar fa-fw"></i>
+						<p>10 Registrados</p>
+					</div>
+				</a>
+
+				<a href="/user-list" class="tile">
+					<div class="tile-tittle">Usuarios</div>
+					<div class="tile-icon">
+						<i class="fas fa-user-secret fa-fw"></i>
+						<p>50 Registrados</p>
+					</div>
+				</a>
+
+				<a href="/company" class="tile">
+					<div class="tile-tittle">Inversionistas</div>
+					<div class="tile-icon">
+						<i class="fas fa-store-alt fa-fw"></i>
+						<p>1 Registrada</p>
+					</div>
+				</a>
+				
+			</div>
+			
+
+		</section>
+	</main>
+	
+	
+	<!--=============================================
+	=            Include JavaScript files           =
+	==============================================-->
+	
+	<!-- javascript-fragment.html -->
+<div th:fragment="javascript-include">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+	<!-- jQuery V3.4.1 -->
+	<script src="/jspage/jquery-3.4.1.min.js" ></script>
+
+
+
+
+	<script src="/js/jquery-3.6.0.min.js"></script>
+	<script src="/js/sweetalert2@11.js"></script>
+
+
+
+	<!-- popper -->
+	<script src="/jspage/popper.min.js" ></script>
+
+	<!-- Bootstrap V4.3 -->
+	<script src="/jspage/bootstrap.min.js" ></script>
+
+	<!-- jQuery Custom Content Scroller V3.1.5 -->
+	<script src="/jspage/jquery.mCustomScrollbar.concat.min.js" ></script>
+
+	<!-- Bootstrap Material Design V4.0 -->
+	<script src="jspage/bootstrap-material-design.min.js" ></script>
+	<script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+
+	<script src="/jspage/main.js" ></script>
+</div>
+</body>
+</html>
