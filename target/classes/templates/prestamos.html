@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="home  :: head">
+<meta charset="UTF-8">
+<title>Prestamos</title>
+</head>
+<body>
+<style>
+
+	/* Estilos para el modal */
+    .modal-content {
+      border-radius: 20px;
+    }
+
+    .modal-title {
+      color: #007bff;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .btn-close {
+      color: #dc3545; /* Color para el botón de cerrar */
+    }
+</style>
+	<style>
+		 
+	table{
+		  width: 100%; /* Ancho del contenedor */
+    	height: 300px; /* Alto del contenedor */
+    	overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido es más grande que el contenedor */
+    	
+	}	 
+#primer-th {
+
+    border-top: none; /* Elimina el borde superior */
+    border-left: none; /* Elimina el borde izquierdo */
+}
+
+    
+        th[colspan="5"] { /* Aplica estilos a los th que ocupan 5 columnas */
+        text-align: center; /* Centra el texto horizontalmente */
+        background-color: purple;
+        color: white;
+    }
+        /* Estilos para el encabezado de la tabla */
+		 th {
+
+            color: #8a2be2;
+            border: 1px solid #ddd; /* Borde gris */
+            padding: 8px;
+            text-align: center; /* Centrar el contenido */
+            
+        }
+
+        /* Estilos para las celdas de la tabla */
+        td {
+            border: 1px solid #ddd; /* Borde gris */
+            padding: 8px;
+           
+            color: black;
+             text-align: center; /* Centrar el contenido */
+        }
+        
+              
+   /* Estilos para las celdas afectadas por el hover */
+        .monto-cell:hover {
+            background-color: blue; /* Cambia el color de fondo a azul */
+            color: white; /* Cambia el color de las letras a blanco */
+            cursor: pointer; /* Cambia el cursor a un puntero */
+        }
+     .hidden-column {
+        display: none;
+    }
+
+    </style>
+	<main class="full-box main-container" style="background-color: #E4e4e4;">
+		<section class="full-box nav-lateral">
+			<div class="full-box nav-lateral-bg show-nav-lateral"></div>
+			<div class="full-box nav-lateral-content" th:replace="home :: nav-lateral">
+			</div>
+		</section>
+		<section th:fragment="contenido" class="full-box page-content">
+						<nav class="full-box navbar-info">
+				<a href="#" class="float-left show-nav-lateral">
+					<i class="fas fa-exchange-alt"></i>
+				</a>
+				<a href="/user-update">
+					<i class="fas fa-user-cog"></i>
+				</a>
+				<a href="#" class="btn-exit-system">
+					<i class="fas fa-power-off"></i>
+				</a>
+			</nav>
+            <!-- Page header -->
+            <div class="full-box page-header">
+                <h3 class="text-left">
+                    <i class="fas fa-clipboard-list fa-fw"></i> &nbsp; TABLA DE PRESTAMOS
+                </h3>
+            </div>
+            <div class="container-fluid">
+                <ul class="full-box list-unstyled page-nav-tabs">
+                    <li>
+                        <a class="active" href="#"><i class="fas fa-plus fa-fw"></i> &nbsp; NUEVO PRÉSTAMO</a>
+                    </li>
+                    <li>
+                        <a href="/historial-prestamo"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; LISTA DE SOLICITUDES</a>
+                    </li>
+                    <li>
+                    	<a href="/cuotas-list-prestatario-pendiente"><i class="fas fa-clipboard-list fa-fw"></i> &nbsp; CUOTAS DE PAGO PENDIENTES</a>
+                	</li>
+                </ul>
+            </div>
+
+			<div class="container">
+				<div class="card mx-auto mt-4 mb-4 p-4">
+			<div class="text-center">
+			<h1 class="mt-4 mb-4" style="font-weight: bold;">SOLICITUD DE PRÉSTAMO</h1>
+			<div class="container">
+
+				
+			<table id="table" class="mx-auto">
+			    <thead>
+			<tr>
+				<th id="primer-th" border="none"></th>
+            	<th colspan="5">Monto</th> <!-- Encabezado "Monto" ocupa 5 columnas -->
+            </tr>
+			        <tr>
+						
+			            <th style="background-color: #debeec;">Duración</th>
+			            <th style="background-color: #debeec;">S/150</th>
+			            <th style="background-color: #debeec;">S/200</th>
+			            <th style="background-color: #debeec;">S/250</th>
+			            <th style="background-color: #debeec;">S/300</th>
+			            <th style="background-color: #debeec;">S/350</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <!-- Itera sobre los resultados y muestra cada fila en la tabla -->
+			        <tr th:each="resultado : ${resultados}">
+			            <!-- Accede a cada valor de la fila -->
+			            <td th:text="${resultado[0]}"></td> <!-- Duración en días -->
+			            <td th:text="${resultado[1]}" class="monto-cell" onclick="abrirModal(this)"></td> <!-- Monto 1 -->
+			            <td th:text="${resultado[2]}" class="monto-cell" onclick="abrirModal(this)"></td> <!-- Monto 2 -->
+			            <td th:text="${resultado[3]}" class="monto-cell" onclick="abrirModal(this)"></td> <!-- Monto 3 -->
+			            <td th:text="${resultado[4]}" class="monto-cell" onclick="abrirModal(this)"></td> <!-- Monto 4 -->
+			            <td th:text="${resultado[5]}" class="monto-cell" onclick="abrirModal(this)"></td> <!-- Monto 5 -->
+			            <td th:text="${resultado[6]}" class="hidden-column"></td>
+			        </tr>
+			    </tbody>
+			</table>
+			
+			
+
+			</div>
+			</div>
+			</div>
+				</div>
+		</section>
+	</main>
+	
+	
+	
+			<!-- Modal -->
+<div class="modal fade" id="AbrirModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">REGISTRAR SOLICITUD</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border: none;"><i class="fas fa-times"></i></button>
+      </div>
+
+      <form th:action="@{/solicitarprestamo}" th:object="${solicitud}" method="post">
+    	  <div class="modal-body">
+
+			   <div class="mb-3 row">
+		    <label for="inputMonto" class="col-sm-2 col-form-label">MONTO</label>
+		    <div class="col-sm-10">
+				<div class="input-group">
+					<span class="input-group-text">S/ </span>
+					<input th:field="*{monto}" type="text" class="form-control" id="inputMonto" th:value="${solicitud.monto}" readonly>
+				</div>
+
+		    </div>
+		  </div>
+		  
+		  
+		  	 <div class="mb-3 row">
+		    <label for="inputFechaInicio" class="col-sm-2 col-form-label">FECHA INICIO</label>
+		    <div class="col-sm-10">
+		      <input th:field="*{fecInicio}" type="date" class="form-control" id="inputFechaInicio" name="" th:value="${solicitud.fecInicio}" required>
+		    </div>
+		  </div>
+		  
+		  
+		   <div class="mb-3 row">
+		    <label for="inputFechaFin" class="col-sm-2 col-form-label">FECHA FIN</label>
+		    <div class="col-sm-10">
+		      <input th:field="*{fecFin}" type="date" class="form-control" id="inputFechaFin" name="fecFin" th:value="${solicitud.fecFin}" readonly>
+		    </div>
+		  </div>
+		  
+		   <div class="mb-3 row">
+		    <label for="inputDias" class="col-sm-2 col-form-label">DURACION PRÉSTAMO</label>
+		    <div class="col-sm-10">
+		      <input th:field="*{dias}" type="number" class="form-control" id="inputDias" th:value="${solicitud.dias}" readonly>
+		    </div>
+		  </div>
+
+			  <div class="mb-3 row">
+				  <label for="inputDiasLaborables" class="col-sm-2 col-form-label">DIAS LABORABLES </label>
+				  <div class="col-sm-10">
+					  <input th:field="*{diaslaborales}" type="number" class="form-control" id="inputDiasLaborables" th:value="${solicitud.diaslaborales}" readonly>
+				  </div>
+			  </div>
+		  
+		  
+		   <div class="mb-3 row">
+		    <label for="inputPagoDiario" class="col-sm-2 col-form-label">PAGO DIARIO</label>
+		    <div class="col-sm-10">
+				<div class="input-group">
+				<span class="input-group-text">S/ </span>
+        <input th:field="*{pagodiario}" type="number" class="form-control" id="inputPagoDiario" th:value="${solicitud.pagodiario}" readonly>
+				</div>
+		    </div>
+		  </div>
+		  
+		   <div class="mb-3 row">
+		    <label for="inputInteres" class="col-sm-2 col-form-label">INTERES</label>
+		    <div class="col-sm-10">
+		      <input th:field="*{interes}" type="number" class="form-control" id="inputInteres" th:value="${solicitud.interes}" readonly>
+		  
+		    </div>
+		  </div>
+		  
+		  <div class="mb-3 row text-center">
+			  <div class="col">
+			  <button type="submit" class="btn btn-raised btn-info btn-sm"><i class="far fa-save"></i> &nbsp; GUARDAR</button>
+			  </div>
+		  </div>
+		  
+		  </div>
+		</form>
+    	  </div>
+    	  </div>
+      </div>
+
+	
+      
+      
+
+
+
+	 <script>
+		 // Función para abrir el modal y realizar cálculos
+         function abrirModal(element) {
+             // Abre el modal con el id "AbrirModal"
+             $('#AbrirModal').modal('show');
+
+             // Restablece los valores de fecha de inicio y fecha de fin
+             $('#inputFechaInicio').val('');
+             $('#inputFechaFin').val('');
+
+             // Obtiene el valor de la celda clicada
+             var monto = $(element).text();
+
+             // Establece el valor del input de monto con el valor de la celda
+             $('#inputMonto').val(monto);
+
+             // Ahora "element" es la referencia al elemento que activó el evento onclick
+             $tr = $(element).closest('tr');
+             var data = $tr.children("td").map(function(){
+                 return $(this).text();
+             }).get();
+             console.log(data);
+
+             // Obtiene la duración desde el arreglo data
+             var duracion = parseInt(data[0]);
+
+             // Calcula la duración ajustada contando solo los días laborables
+             var fechaInicio = new Date();
+             var fechaFin = calcularFechaFin(fechaInicio, duracion);
+             var duracionLaborables = calcularDiasLaborables(fechaInicio, fechaFin);
+
+
+             // Obtiene la duración desde el arreglo data
+             var duracion = parseInt(data[0]);
+             $('#inputDias').val(duracion);
+
+             // Calcula el pago diario dividiendo el monto entre el número de días laborables
+             var pagoDiario = calcularPagoDiario(monto, fechaInicio, fechaFin);
+
+             // Establece los valores calculados en los inputs correspondientes
+             //$('#inputPagoDiario').val(pagoDiario);
+             $('#inputInteres').val(data[6]);
+
+             // Agregar evento de cambio al campo de fecha de inicio
+         $('#inputFechaInicio').change(function() {
+             var fechaInicio = new Date($(this).val()); // Obtener la fecha de inicio ingresada por el usuario
+             var duracion = parseInt($('#inputDias').val()); // Obtener la duración del préstamo
+             if (!isNaN(duracion)) { // Verificar si la duración es un número válido
+                 var fechaFin = calcularFechaFin(fechaInicio, duracion);
+                 $('#inputFechaFin').val(fechaFin.toISOString().slice(0, 10)); // Establecer la fecha de finalización
+             	 var duracionLaborables = calcularDiasLaborables(fechaInicio, fechaFin);
+             	 $('#inputDiasLaborables').val(duracionLaborables);
+             	 var pagoDiario = calcularPagoDiario(monto, fechaInicio, fechaFin);
+             	 $('#inputPagoDiario').val(pagoDiario);
+
+             }
+         });
+
+         // Agregar evento para limpiar los campos al cerrar el modal
+         $('#AbrirModal').on('hidden.bs.modal', function () {
+             $('#inputPagoDiario').val('');
+             $('#inputDiasLaborables').val('');
+         });
+
+         }
+
+
+         // Función para calcular la cantidad de días laborables entre dos fechas
+         function calcularDiasLaborables(fechaInicio, fechaFin) {
+             var diasLaborables = 0;
+             var fecha = new Date(fechaInicio);
+             while (fecha <= fechaFin) {
+                 if (fecha.getDay() !== 0 && fecha.getDay() !== 6) {
+                     diasLaborables++;
+                 }
+                 fecha.setDate(fecha.getDate() + 1);
+             }
+             return diasLaborables;
+         }
+
+         // Función para calcular el pago diario excluyendo los sábados y domingos
+         function calcularPagoDiario(monto, fechaInicio, fechaFin) {
+             var diasLaborables = calcularDiasLaborables(fechaInicio, fechaFin);
+             var pagoDiario = parseFloat(monto) / parseFloat(diasLaborables);
+             return pagoDiario.toFixed(2);
+         }
+
+         // Función para calcular la fecha de finalización incluyendo sábados y domingos y luego restar un día
+         function calcularFechaFin(fechaInicio, dias) {
+             var fecha = new Date(fechaInicio);
+
+             for (var i = 0; i < dias; i++) {
+                 fecha.setDate(fecha.getDate() + 1);
+             }
+
+             fecha.setDate(fecha.getDate() - 1); // Restar un día a la fecha obtenida
+
+             return fecha;
+         }
+	 </script>
+	
+    <!-- Incluir el fragmento de JavaScript -->
+    <div th:include="home :: javascript-include"></div>
+    
+    
+    
+    
+
+</body>
+</html>
